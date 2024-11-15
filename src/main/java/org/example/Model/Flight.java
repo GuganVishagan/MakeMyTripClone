@@ -1,37 +1,50 @@
 package org.example.Model;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.Map;
 
 
 public class Flight {
-    private Date date;
-    private String src;
-    private String dest;
-    private LocalTime start;
-    private LocalTime end;
-    private Aircraft aircraft;
+    public String flightId;
+    public String src;
+    public String dest;
+    public LocalDateTime departureTime;
+    public LocalDateTime arrivalTime;
+    Map<String, Seat> seats;
 
-    public Flight(Date date, String src, String dest, LocalTime start, LocalTime end, Aircraft aircraft){
-        this.date = date;
+    public Flight(String flightId, String src, String dest, LocalDateTime departureTime, LocalDateTime arrivalTime) {
+        this.flightId = flightId;
         this.src = src;
         this.dest = dest;
-        this.start = start;
-        this.end = end;
-        this.aircraft = aircraft;
+        this.departureTime = departureTime;
+        this.arrivalTime = arrivalTime;
+        this.seats = new HashMap<>();
     }
 
-    public boolean cancelForCustomer(Customer customer){
-        Map<String, Seat> seats = this.getAircraft().getSeats();
-        for(Seat seat: seats.values()){
-            if(customer == seat.getCustomer())
-                seat.setCustomer(null);
-        }
-        return true;
+
+    public String getDest() {
+        return dest;
     }
 
-    public Aircraft getAircraft() {
-        return aircraft;
+    public String getSrc() {
+        return src;
     }
 
+    public LocalDateTime getDepartureTime() {
+        return departureTime;
+    }
+
+    public LocalDateTime getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public String getFlightId() {
+        return flightId;
+    }
+
+    public Map<String, Seat> getFlightSeats() {
+        return seats;
+    }
 }

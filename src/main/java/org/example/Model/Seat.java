@@ -1,26 +1,27 @@
 package org.example.Model;
 
-public class Seat {
-    private Type type;
-    private String id;
-    public Customer customer;
-    private int price;
+import org.example.Enums.SeatType;
 
-    public Seat(Type type, String id){
-        this.type = type;
+public class Seat {
+    private SeatType seatType;
+    private final String id;
+    public User customer;
+
+    public Seat(SeatType type, final String id) {
+        this.seatType = type;
         this.id = id;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public SeatType getType() {
+        return seatType;
     }
 
-    public Type getType() {
-        return type;
-    }
-
-    public Customer getCustomer() {
+    public User getCustomer() {
         return customer;
+    }
+
+    public void setCustomer(User user){
+        this.customer = user;
     }
 
     public String getSeatId(){
@@ -28,8 +29,3 @@ public class Seat {
     }
 }
 
-enum Type{
-    Economy,
-    Premium,
-    Emergency
-}
