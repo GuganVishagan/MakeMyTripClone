@@ -5,21 +5,24 @@ import org.example.Model.Flight;
 import org.example.Model.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class AdminManagerImpl implements AdminManager {
-    private List<Flight> flights;
+    public Map<String, Flight> flights;
     public UserManager userManager;
 
     public AdminManagerImpl(UserManager userManager) {
-        this.flights = new ArrayList<>();
+        this.flights = new HashMap<>();
         this.userManager = userManager;
     }
 
     @Override
     public boolean addFlight(Flight flight, User user) {
         if(this.userManager.getUserRole(user) == Role.Admin){
-            this.flights.add(flight);
+            this.flights.putIfAbsent(flight.getFlightId(), flight);
             System.out.println("Added flight " + flight);
             return true;
         }
@@ -30,7 +33,7 @@ public class AdminManagerImpl implements AdminManager {
     @Override
     public boolean deleteFlight(Flight flight, User user) {
         if(this.userManager.getUserRole(user) == Role.Admin){
-            this.flights.remove(flight);
+            this.flights.remove(flight.getFlightId());
             System.out.println("Removed flight " + flight);
             return true;
         }
@@ -41,19 +44,24 @@ public class AdminManagerImpl implements AdminManager {
     @Override
     public List<Flight> getAllFlights() {
         System.out.println("Get all flights");
-        return this.flights;
+        return this.flights.values().stream().collect(Collectors.toList());
     }
 
     @Override
     public List<Flight> getParticularFlights(Flight flight) {
         List<Flight> particularFlights = new ArrayList<>();
-        for(Flight currentFlight : this.flights){
-            if(flight.getDest().equals(currentFlight.getDest()) && flight.getSrc().equals((currentFlight.getSrc())) && flight.getDepartureTime().equals(currentFlight.getDepartureTime())){
+        for(Flight currentFlight : this.flights.values()){
+            if(currentFlight.getFlightId().equals(flight.getFlightId())){
                 particularFlights.add(currentFlight);
             }
         }
         System.out.println("Get the particular flights");
         return particularFlights;
+    }
+
+    @Override
+    public boolean isFlightAvailable(Flight flight) {
+        return this.flights.containsKey(flight.getFlightId());
     }
 
 
